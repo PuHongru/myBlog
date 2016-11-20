@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <title>主页</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+</head>
+<style>
+    /*******************
+    * 基本样式
+    *******************/
+    body,nav,div,h1,span,p,footer{
+        margin: 0;
+        padding: 0;
+    }
+    html{
+        font-size: 62.5%;
+    }
+    body{
+        width: 100%;
+        color: #222222;
+    }
+    /*******************
+    * 浏览器更新提示
+    *******************/
+    .browserupdate{
+        text-align: center;
+        font-size: 2rem;
+        background-color: #cccccc;
+    }
+</style>
+<body>
+    <!--[if lte IE 8]>
+        <p class="browserupdate">您的浏览器版本太低，请到<a href="http://browsehappy.com">这里</a>更新！</p>
+    <![end if]-->
+    <header>
+        <nav>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2"></div>
+                    <div class="col-lg-8 col-md-8">
+                        <h1>myblog<span>my first blog</span></h1>
+                    </div>
+                    <div class="nav-setting col-lg-2 col-md-2"></div>
+                </div>
+            </div>
+        </nav>
+        <div class="notification">
+            <p>登陆成功</p>
+        </div>
+    </header>
+    <div id="container">
+        <div class="post-content"></div>
+        <div class="post-content"></div>
+        <div class="post-content"></div>
+    </div>
+    <footer></footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</body>
+</html>
