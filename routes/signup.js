@@ -10,7 +10,8 @@ var userModel = require('../models/users.js');
 var checkNotLogin = require('../middlewares/check').checkNotLogin;
 
 //  GET /signup 注册页面
-router.get('/',checkNotLogin, function (req, res, next) {
+router.get('/',checkNotLogin,function (req, res, next) {
+    console.log(req.session.user);
     res.render('signup');
 });
 

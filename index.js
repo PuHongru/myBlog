@@ -62,6 +62,5 @@ routes(app);
 
 // ¼àÌý¶Ë¿Ú£¬Æô¶¯³ÌÐò
 app.listen(config.port, function () {
-    console.log(config.port);
-    console.log('${pkg.name} listening on port ${config.port}');
+    console.log(pkg.name + ' listening on port ' + config.port);
 });
