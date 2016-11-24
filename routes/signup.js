@@ -6,7 +6,7 @@ var sha1 = require('sha1');  // 用于加密
 var express = require('express');
 var router = express.Router();
 
-var userModel = require('../models/users.js');
+var UserModel = require('../models/users.js');
 var checkNotLogin = require('../middlewares/check').checkNotLogin;
 
 //  GET /signup 注册页面
@@ -61,7 +61,7 @@ router.post('/',checkNotLogin, function (req, res, next) {
         bio: bio
     };
     // 用户信息写入数据库
-    userModel.create(user)
+    UserModel.create(user)
         .then(function (result) {
             // 此 user 是插入 mongodb 后的值，包含 _id
             user = result.ops[0];

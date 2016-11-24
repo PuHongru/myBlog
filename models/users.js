@@ -1,6 +1,9 @@
 /**
  * Created by puhongru on 2016/11/21.
  */
+/***********************
+ * 与用户操作相关的代码
+ * *********************/
 var User = require('../lib/mongo.js').User;
 
 module.exports = {
