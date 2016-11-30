@@ -39,7 +39,7 @@ app.use(flash());
 
 // 处理表单以及文件上传的中间件
 app.use(require('express-formidable')({
-    upload: path.join(__dirname,'public/img'),  // 文件（头像）上传目录
+    uploadDir: path.join(__dirname,'public/img'),  // 文件（头像）上传目录
     keepExtensions: true  // 保留后缀
 }));
 

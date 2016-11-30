@@ -8,80 +8,93 @@ var PostModel = require('../models/posts');
 
 var checkLogin = require('../middlewares/check').checkLogin;
 
-//  GET /posts ËùÓĞÓÃ»§»òÌØ¶¨ÓÃ»§µÄÎÄÕÂÒ³
+//  GET /posts æ‰€æœ‰ç”¨æˆ·æˆ–ç‰¹å®šç”¨æˆ·çš„æ–‡ç« é¡µ
 //  eg: GET /posts?author=xxx
-router.get('/', function (req, res, next) {
-    res.render('posts');
+router.get('/', function(req, res, next) {
+    var author = req.query.author;
+
+    PostModel.getPosts(author)
+        .then(function (posts) {
+            res.render('posts', {
+                posts: posts
+            });
+        })
+        .catch(next);
 });
 
-//  POST /posts ·¢±íÒ»ÆªÎÄÕÂ
+// GET /posts/create å‘è¡¨æ–‡ç« é¡µ
+router.get('/create',checkLogin, function (req, res, next) {
+    res.render('create');
+});
+
+//  POST /posts/create å‘è¡¨ä¸€ç¯‡æ–‡ç« 
 router.post('/',checkLogin, function (req, res, next) {
     var author = req.session.user._id;
     var title = req.fields.title;
-    var content = req.fields.title;
+    var content = req.fields.content;
 
-    // Ğ£Ñé²ÎÊı
+    // æ ¡éªŒå‚æ•°
     try{
         if (!title.length) {
-            throw new Error('ÇëÌîĞ´±êÌâ');
+            throw new Error('è¯·å¡«å†™æ ‡é¢˜');
         }
         if (!content.length) {
-            throw new Error('ÇëÌîĞ´ÄÚÈİ');
+            throw new Error('è¯·å¡«å†™å†…å®¹');
         }
     } catch(e) {
         req.flash('error', e.message);
         return res.redirect('back');
     }
 
-    // ´ıĞ´ÈëÊı¾İ¿âµÄÎÄÕÂÊı¾İ
+    // å¾…å†™å…¥æ•°æ®åº“çš„æ–‡ç« æ•°æ®
     var post = {
         author: author,
         title: title,
         content: content,
         pv: 0
     };
-    // ½«ÎÄÕÂÊı¾İĞ´ÈëÊı¾İ¿â
+    // å°†æ–‡ç« æ•°æ®å†™å…¥æ•°æ®åº“
     PostModel.create(post)
         .then(function (result) {
-            // ´Ë post ÊÇ²åÈë mongodb ºóµÄÖµ£¬°üº¬ _id
+            // æ­¤ post æ˜¯æ’å…¥ mongodb åçš„å€¼ï¼ŒåŒ…å« _id
             post = result.ops[0];
-            req.flash('success','·¢±í³É¹¦');
-            // ·¢±í³É¹¦ºóÌø×ªµ½¸ÃÎÄÕÂÒ³
-            res.redirect('/posts/${post._id}');
+            req.flash('success','å‘è¡¨æˆåŠŸ');
+            // å‘è¡¨æˆåŠŸåè·³è½¬åˆ°è¯¥æ–‡ç« é¡µ
+            res.redirect('/posts');
         }).catch(next);
 });
 
-//  GET /posts/create ·¢±íÎÄÕÂÒ³
+//  GET /posts/create å‘è¡¨æ–‡ç« é¡µ
 router.get('/create',checkLogin, function (req, res, next) {
     res.render('create');
 });
 
-//  GET /posts/:postId µ¥¶ÀÒ»ÆªµÄÎÄÕÂÒ³
+//  GET /posts/:postId å•ç‹¬ä¸€ç¯‡çš„æ–‡ç« é¡µ
 router.get('/:postId', function (req, res, next) {
     res.send(req.flash());
 });
 
-//  GET /posts/:postId/edit ¸üĞÂÎÄÕÂÒ³
+//  GET /posts/:postId/edit æ›´æ–°æ–‡ç« é¡µ
 router.get('/:postId/edit', checkLogin,function (req, res, next) {
     res.send(req.flash());
 });
 
-//  POST /posts/:postId/edit ¸üĞÂÒ»ÆªÎÄÕÂ
+//  POST /posts/:postId/edit æ›´æ–°ä¸€ç¯‡æ–‡ç« 
 router.post('/:postId/edit',checkLogin,function (req, res, next) {
     res.send(req.flash());
 });
 
-//  GET /posts/:postId/remove É¾³ıÒ»ÆªÎÄÕÂ
+//  GET /posts/:postId/remove åˆ é™¤ä¸€ç¯‡æ–‡ç« 
 router.get('/:postId/remove',checkLogin, function (req, res, next) {
     res.send(req.flash());
 });
 
-//  POST /posts/:postId/comment ´´½¨Ò»ÌõÁôÑÔ
+//  POST /posts/:postId/comment åˆ›å»ºä¸€æ¡ç•™è¨€
 router.post('/:postId/comment',checkLogin, function (req, res, next) {
     res.send(req.flash());
 });
 
-//  GET /posts/:postId/comment/:commentId/remove É¾³ıÒ»ÌõÁôÑÔ
+//  GET /posts/:postId/comment/:commentId/remove åˆ é™¤ä¸€æ¡ç•™è¨€
 router.get('/:postId/comment/:commentId/remove',checkLogin, function (req, res, next) {
     res.send(req.flash());
 });
