@@ -1,36 +1,142 @@
 ﻿<%- include('header') %>
 
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.mockjax.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.mockjax({
+            url:"users.action",
+            response: function (settings) {
+                var user = settings.data.name,
+                        users = ["phr","asdf","zhangshan"];
+                this.responseText = "true";
+                if($.inArray(user,users) !== -1) {
+                    this.responseText = "false";
+                }
+            },
+            responseTime: 500
+        });
+
+        // validate signup form on keyup and submit
+        var validator = $("#signupform").validate({
+            rules: {
+                name: {
+                    required: true,
+                    rangelength: [2,10],
+                    remote: {
+                        url: "/signup/signupcheck",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            name: function() {
+                                return $("#name").val();
+                            }
+                        }
+                    }
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                repassword: {
+                    required: true,
+                    minlength: 6,
+                    equalTo: "#password"
+                },
+                //avatar: required,
+                avatar: {
+                    required: true
+                },
+                bio: {
+                    required: true,
+                    rangelength: [1,30]
+                }
+            },
+            messages: {
+                name: {
+                    required: "请输入用户名",
+                    rangelength: jQuery.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
+                    remote: jQuery.validator.format("{0} 已经被使用")
+                },
+                password: {
+                    required: "请输入密码",
+                    minlength: jQuery.validator.format("密码至少为 {0} 个字符")
+                },
+                repassword: {
+                    required: "请输入密码",
+                    minlength: jQuery.validator.format("密码至少为 {0} 个字符"),
+                    equalTo: "两次输入的密码不一样"
+                },
+                avatar: {
+                    required: "请上传头像"
+                },
+                bio: {
+                    required: "请输入个人简介",
+                    rangelength: jQuery.validator.format("个人简介请限制在 {0} - {1} 个字符")
+                }
+            },
+            // the errorPlacement has to take the table layout into account
+            errorPlacement: function (error, element) {
+                error.appendTo(element.next());
+            },
+            // specifying a submitHandler prevents the default submit,good for the demo
+            submitHandler: function () {
+                alert("submitted!");
+            },
+            // set this class to error-labels to indicate valid fields
+            success: function (label) {
+                // set &nbsp; as text for IE
+                label.html("&nbsp;").addClass("checked");
+            }
+        });
+    })
+</script>
+<style>
+    .status{
+        color: red;
+    }
+</style>
+
 <div class="ui grid">
     <div class="four wide column"></div>
     <div class="eight wide column">
-        <form class="ui form segment" method="post" enctype="multipart/form-data">
+        <form class="ui form segment" id="signupform" method="post" enctype="multipart/form-data">
             <div class="field required">
-                <label>用户名</label>
-                <input placeholder="用户名" type="text" name="name">
+                <label for="name">用户名</label>
+                <input placeholder="用户名" type="text" name="name" id="name">
+                <p class="status"></p>
             </div>
             <div class="field required">
-                <label>密码</label>
-                <input placeholder="密码" type="password" name="password">
+                <label for="password">密码</label>
+                <input placeholder="密码" type="password" name="password" id="password">
+                <p class="status"></p>
             </div>
             <div class="field required">
-                <label>重复密码</label>
-                <input placeholder="重复密码" type="password" name="repassword">
+                <label for="repassword">重复密码</label>
+                <input placeholder="重复密码" type="password" name="repassword" id="repassword">
+                <p class="status"></p>
             </div>
             <div class="field required">
-                <label>性别</label>
-                <select class="ui compact selection dropdown" name="gender">
+                <label for="gender">性别</label>
+                <select class="ui compact selection dropdown" name="gender" id="gender">
                     <option value="m">男</option>
                     <option value="f">女</option>
                     <option value="x">保密</option>
                 </select>
+                <p class="status"></p>
             </div>
             <div class="field required">
-                <label>头像</label>
-                <input type="file" name="avatar">
+                <label for="avatar">头像</label>
+                <input type="file" name="avatar" id="avatar" accept="image/*">
+                <p class="status"></p>
             </div>
             <div class="field required">
-                <label>个人简介</label>
-                <textarea name="bio" rows="5" v-model="user.bio"></textarea>
+                <label for="bio">个人简介</label>
+                <textarea id="bio" name="bio" rows="5" v-model="user.bio"></textarea>
+                <p class="status"></p>
             </div>
             <input type="submit" class="ui button fluid" value="注册">
         </form>

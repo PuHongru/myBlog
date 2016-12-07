@@ -3,6 +3,7 @@
  */
 var path = require('path');
 var sha1 = require('sha1');  // 用于加密
+var bodyparser = require('body-parser');
 var express = require('express');
 var router = express.Router();
 
@@ -82,5 +83,22 @@ router.post('/',checkNotLogin, function (req, res, next) {
             next();
         });
 });
+
+//  POST /signupcheck 页面，检查用户名是否已经被注册
+router.post('/signupcheck',checkNotLogin, function (req, res, next) {
+     var name = req.fields.name;
+    console.log(name);
+
+     UserModel.getUserByName(name)
+         .then(function (user) {
+             if (user) {
+                 res.json(false);
+             } else {
+                 res.json(true);
+             }
+         })
+         .catch(next);
+});
+
 
 module.exports = router;
