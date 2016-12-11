@@ -84,7 +84,7 @@ router.post('/',checkNotLogin, function (req, res, next) {
         });
 });
 
-//  POST /signupcheck 页面，检查用户名是否已经被注册
+//  POST /signup/signupcheck 页面，检查用户名是否已经被注册
 router.post('/signupcheck',checkNotLogin, function (req, res, next) {
      var name = req.fields.name;
     console.log(name);
